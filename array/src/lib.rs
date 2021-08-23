@@ -500,6 +500,328 @@ impl Solution {
         }
         return up && down;
     }
+
+    /**
+    https://leetcode.com/explore/learn/card/fun-with-arrays/511/in-place-operations/3259/
+
+    Replace Elements with Greatest Element on Right Side
+    Given an array arr, replace every element in that array with the greatest element among the elements to its right, and replace the last element with -1.
+
+    After doing so, return the array.
+
+
+
+    Example 1:
+    Input: arr = [17,18,5,4,6,1]
+    Output: [18,6,6,6,1,-1]
+    Explanation:
+    - index 0 --> the greatest element to the right of index 0 is index 1 (18).
+    - index 1 --> the greatest element to the right of index 1 is index 4 (6).
+    - index 2 --> the greatest element to the right of index 2 is index 4 (6).
+    - index 3 --> the greatest element to the right of index 3 is index 4 (6).
+    - index 4 --> the greatest element to the right of index 4 is index 5 (1).
+    - index 5 --> there are no elements to the right of index 5, so we put -1.
+
+    Example 2:
+    Input: arr = [400]
+    Output: [-1]
+    Explanation: There are no elements to the right of index 0.
+
+
+    Constraints:
+
+    1 <= arr.length <= 10^4
+    1 <= arr[i] <= 10^5
+
+    Hide Hint #1
+    Loop through the array starting from the end.
+
+    Hide Hint #2
+    Keep the maximum value seen so far.
+    */
+
+    pub fn replace_elements(mut arr: Vec<i32>) -> Vec<i32> {
+        let mut idx = arr.len() - 1;
+        let mut max = arr[idx];
+        let mut max_temp = 0;
+        while idx >= 0 {
+            if idx == arr.len() - 1 {
+                arr[idx] = -1
+            } else {
+                max_temp = arr[idx];
+                arr[idx] = max
+            }
+
+            if max_temp > max {
+                max = max_temp;
+            }
+            if idx == 0 {
+                break;
+            }
+            idx = idx - 1;
+        }
+        return arr;
+    }
+
+    /**
+    https://leetcode.com/explore/learn/card/fun-with-arrays/511/in-place-operations/3259/
+
+
+    Move Zeroes
+
+    Solution
+    Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero elements.
+
+    Note that you must do this in-place without making a copy of the array.
+
+
+
+    Example 1:
+    Input: nums = [0,1,0,3,12]
+    Output: [1,3,12,0,0]
+
+    Example 2:
+    Input: nums = [0]
+    Output: [0]
+
+
+    Constraints:
+
+    1 <= nums.length <= 10^4
+    -2^31 <= nums[i] <= 2^31 - 1
+
+
+    Follow up: Could you minimize the total number of operations done?
+        */
+
+    pub fn move_zeroes(nums: &mut Vec<i32>) {
+        if nums.len() <= 1 {
+            return;
+        }
+        let mut idx = 0usize;
+        while idx < nums.len() - 1 {
+            if nums[idx] == 0 {
+                let mut idx_inner = idx + 1;
+                while idx_inner < nums.len() {
+                    if nums[idx_inner] != 0 {
+                        let temp = nums[idx];
+                        nums[idx] = nums[idx_inner];
+                        nums[idx_inner] = temp;
+                        break;
+                    }
+                    idx_inner += 1;
+                }
+            }
+            idx += 1;
+        }
+    }
+
+    /**
+    https://leetcode.com/explore/learn/card/fun-with-arrays/511/in-place-operations/3260/
+
+    Sort Array By Parity
+
+    Solution
+    Given an integer array nums, move all the even integers at the beginning of the array followed by all the odd integers.
+
+    Return any array that satisfies this condition.
+
+
+
+    Example 1:
+    Input: nums = [3,1,2,4]
+    Output: [2,4,3,1]
+    Explanation: The outputs [4,2,3,1], [2,4,1,3], and [4,2,1,3] would also be accepted.
+
+    Example 2:
+    Input: nums = [0]
+    Output: [0]
+
+
+    Constraints:
+
+    1 <= nums.length <= 5000
+    0 <= nums[i] <= 5000
+    */
+    pub fn sort_array_by_parity(mut nums: Vec<i32>) -> Vec<i32> {
+        let mut idx = 0usize;
+        let mut right = nums.len() - 1;
+        while idx < right {
+            if nums[idx] % 2 != 0 {
+                let mut idx_inner = idx + 1;
+                while idx_inner < nums.len() {
+                    if nums[idx_inner] % 2 == 0 {
+                        let temp = nums[idx];
+                        nums[idx] = nums[idx_inner];
+                        nums[idx_inner] = temp;
+                        right = idx_inner;
+                        break;
+                    }
+                    idx_inner += 1;
+                }
+            }
+            idx += 1;
+        }
+        return nums;
+    }
+
+    /**
+    https://leetcode.com/explore/learn/card/fun-with-arrays/523/conclusion/3228/
+
+    Height Checker
+
+    A school is trying to take an annual photo of all the students. The students are asked to stand in a single file line in non-decreasing order by height. Let this ordering be represented by the integer array expected where expected[i] is the expected height of the ith student in line.
+
+    You are given an integer array heights representing the current order that the students are standing in. Each heights[i] is the height of the ith student in line (0-indexed).
+
+    Return the number of indices where heights[i] != expected[i].
+
+
+
+    Example 1:
+    Input: heights = [1,1,4,2,1,3]
+    Output: 3
+    Explanation:
+    heights:  [1,1,4,2,1,3]
+    expected: [1,1,1,2,3,4]
+    Indices 2, 4, and 5 do not match.
+
+    Example 2:
+    Input: heights = [5,1,2,3,4]
+    Output: 5
+    Explanation:
+    heights:  [5,1,2,3,4]
+    expected: [1,2,3,4,5]
+    All indices do not match.
+
+    Example 3:
+    Input: heights = [1,2,3,4,5]
+    Output: 0
+    Explanation:
+    heights:  [1,2,3,4,5]
+    expected: [1,2,3,4,5]
+    All indices match.
+
+
+    Constraints:
+
+    1 <= heights.length <= 100
+    1 <= heights[i] <= 100
+        */
+    pub fn height_checker(heights: Vec<i32>) -> i32 {
+        todo!();
+        return 0;
+    }
+
+    /**
+    https://leetcode.com/explore/learn/card/fun-with-arrays/523/conclusion/3231/
+
+    Third Maximum Number
+
+    Solution
+    Given integer array nums, return the third maximum number in this array. If the third maximum does not exist, return the maximum number.
+
+
+
+    Example 1:
+
+    Input: nums = [3,2,1]
+    Output: 1
+    Explanation: The third maximum is 1.
+
+    Example 2:
+    Input: nums = [1,2]
+    Output: 2
+    Explanation: The third maximum does not exist, so the maximum (2) is returned instead.
+
+    Example 3:
+    Input: nums = [2,2,3,1]
+    Output: 1
+    Explanation: Note that the third maximum here means the third maximum distinct number.
+    Both numbers with value 2 are both considered as second maximum.
+
+
+    Constraints:
+
+    1 <= nums.length <= 10^4
+    -2^31 <= nums[i] <= 2^31 - 1
+
+
+    Follow up: Can you find an O(n) solution?
+        */
+    pub fn third_max(mut nums: Vec<i32>) -> i32 {
+        nums.sort();
+        nums.dedup();
+        if nums.len() >= 3 {
+            return nums[nums.len() - 3];
+        }
+        return nums[nums.len() - 1];
+    }
+
+    /**
+    https://leetcode.com/explore/learn/card/fun-with-arrays/523/conclusion/3270/
+
+    Find All Numbers Disappeared in an Array
+
+    Solution
+    Given an array nums of n integers where nums[i] is in the range [1, n], return an array of all the integers in the range [1, n] that do not appear in nums.
+
+
+
+    Example 1:
+    Input: nums = [4,3,2,7,8,2,3,1]
+    Output: [5,6]
+
+    Example 2:
+    Input: nums = [1,1]
+    Output: [2]
+
+
+    Constraints:
+
+    n == nums.length
+    1 <= n <= 10^5
+    1 <= nums[i] <= n
+
+
+    Follow up: Could you do it without extra space and in O(n) runtime? You may assume the returned list does not count as extra space.
+
+    Hide Hint #1
+    This is a really easy problem if you decide to use additional memory. For those trying to write an initial solution using additional memory, think counters!
+
+    Hide Hint #2
+    However, the trick really is to not use any additional space than what is already available to use. Sometimes, multiple passes over the input array help find the solution. However, there's an interesting piece of information in this problem that makes it easy to re-use the input array itself for the solution.
+
+    Hide Hint #3
+    The problem specifies that the numbers in the array will be in the range [1, n] where n is the number of elements in the array. Can we use this information and modify the array in-place somehow to find what we need?
+    */
+    pub fn find_disappeared_numbers(mut nums: Vec<i32>) -> Vec<i32> {
+        let len_old = nums.len();
+        nums.sort();
+        nums.dedup();
+        let len_new = nums.len();
+
+        let mut result = Vec::<i32>::with_capacity(len_old - len_new);
+        let mut idx_n = 0usize;
+        let mut idx = 0usize;
+
+        while idx_n < len_old {
+            if idx < len_new {
+                if nums[idx] > (idx_n + 1) as i32 {
+                    result.push((idx_n + 1) as i32);
+                    idx_n += 1;
+                } else {
+                    idx += 1;
+                    idx_n += 1;
+                }
+                continue;
+            }
+            result.push((idx_n + 1) as i32);
+            idx_n += 1;
+        }
+
+        return result;
+    }
 }
 
 #[cfg(test)]
@@ -518,7 +840,10 @@ mod tests {
         src_val: T,
     }
 
-    impl<T: Debug + Eq> Judge<T> {
+    impl<T> Judge<T>
+    where
+        T: Debug + Eq,
+    {
         pub fn new(at: AssertType, src_val: T) -> Self {
             return Judge { at, src_val };
         }
@@ -536,106 +861,170 @@ mod tests {
 
     #[test]
     fn test_find_max_consecutive_ones() {
-        let nums = vec![1, 1, 0, 1, 1, 1];
-        let val = Solution::find_max_consecutive_ones(nums);
-        println!("test_find_max_consecutive_ones.val = {}", val);
+        let test_example = vec![
+            (vec![1, 1, 0, 1, 1, 1], Judge::<i32>::new(AssertType::Eq, 3)),
+            (vec![1, 1, 0, 1, 1], Judge::<i32>::new(AssertType::Eq, 2)),
+        ];
 
-        let nums = vec![1, 1, 0, 1, 1];
-        let val = Solution::find_max_consecutive_ones(nums);
-        println!("test_find_max_consecutive_ones.val = {}", val);
+        for (args, judge) in test_example {
+            let result = Solution::find_max_consecutive_ones(args);
+            judge.assert(result);
+        }
     }
 
     #[test]
     fn test_find_numbers() {
-        let nums = vec![12, 345, 2, 6, 7896];
-        let val = Solution::find_numbers(nums);
-        println!("test_find_numbers.val = {}", val);
+        let test_example = vec![
+            (
+                vec![12, 345, 2, 6, 7896],
+                Judge::<i32>::new(AssertType::Eq, 2),
+            ),
+            (
+                vec![555, 901, 482, 1771],
+                Judge::<i32>::new(AssertType::Eq, 1),
+            ),
+        ];
 
-        let nums = vec![555, 901, 482, 1771];
-        let val = Solution::find_numbers(nums);
-        println!("test_find_numbers.val = {}", val);
+        for (args, judge) in test_example {
+            let result = Solution::find_numbers(args);
+            judge.assert(result);
+        }
     }
 
     #[test]
-    fn test_finsorted_squares() {
-        let nums = vec![-4, -1, 0, 3, 10];
-        let val = Solution::sorted_squares(nums);
-        println!("test_finsorted_squares.val = {:?}", val);
+    fn test_sorted_squares() {
+        let test_example = vec![
+            (
+                vec![-4, -1, 0, 3, 10],
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![0, 1, 9, 16, 100]),
+            ),
+            (
+                vec![-7, -3, 2, 3, 11],
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![4, 9, 9, 49, 121]),
+            ),
+        ];
 
-        let nums = vec![-7, -3, 2, 3, 11];
-        let val = Solution::sorted_squares(nums);
-        println!("test_finsorted_squares.val = {:?}", val);
+        for (args, judge) in test_example {
+            let result = Solution::sorted_squares(args);
+            judge.assert(result);
+        }
     }
 
     #[test]
     fn test_duplicate_zeros() {
-        let mut nums = vec![1, 0, 2, 3, 0, 4, 5, 0];
-        Solution::duplicate_zeros(&mut nums);
-        println!("test_duplicate_zeros.val = {:?}", nums);
+        let test_example = vec![
+            (
+                vec![1, 0, 2, 3, 0, 4, 5, 0],
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![1, 0, 0, 2, 3, 0, 0, 4]),
+            ),
+            (
+                vec![1, 2, 3],
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![1, 2, 3]),
+            ),
+        ];
 
-        let mut nums = vec![1, 2, 3];
-        Solution::duplicate_zeros(&mut nums);
-        println!("test_duplicate_zeros.val = {:?}", nums);
+        for (args, judge) in test_example {
+            let mut margs = args;
+            Solution::duplicate_zeros(&mut margs);
+            judge.assert(margs);
+        }
     }
 
     #[test]
     fn test_merge() {
-        let mut nums1 = vec![1, 2, 3, 0, 0, 0];
-        let mut nums2 = vec![2, 5, 6];
-        Solution::merge(&mut nums1, 3, &mut nums2, 3);
-        println!("test_merge.val = {:?}", nums1);
+        let test_example = vec![
+            (
+                vec![1, 2, 3, 0, 0, 0],
+                3,
+                vec![2, 5, 6],
+                3,
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![1, 2, 2, 3, 5, 6]),
+            ),
+            (
+                vec![0],
+                0,
+                vec![1],
+                1,
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![1]),
+            ),
+            (
+                vec![1],
+                1,
+                vec![],
+                0,
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![1]),
+            ),
+            (
+                vec![1, 0],
+                1,
+                vec![2],
+                1,
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![1, 2]),
+            ),
+        ];
 
-        let mut nums1 = vec![0];
-        let mut nums2 = vec![1];
-        Solution::merge(&mut nums1, 0, &mut nums2, 1);
-        println!("test_merge.val = {:?}", nums1);
-
-        let mut nums1 = vec![1];
-        let mut nums2 = vec![];
-        Solution::merge(&mut nums1, 1, &mut nums2, 0);
-        println!("test_merge.val = {:?}", nums1);
-
-        let mut nums1 = vec![1, 0];
-        let mut nums2 = vec![2];
-        Solution::merge(&mut nums1, 1, &mut nums2, 1);
-        println!("test_merge.val = {:?}", nums1);
+        for (nums1, m, nums2, n, judge) in test_example {
+            let mut mnums1 = nums1;
+            let mut mnums2 = nums2;
+            Solution::merge(&mut mnums1, m, &mut mnums2, n);
+            judge.assert(mnums1);
+        }
     }
 
     #[test]
     fn test_remove_element() {
-        let mut nums = vec![3, 2, 2, 3];
-        Solution::remove_element(&mut nums, 3);
-        println!("test_remove_element.val = {:?}", nums);
+        let test_example = vec![
+            (
+                vec![3, 2, 2, 3],
+                3,
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![2, 2]),
+            ),
+            (
+                vec![0, 1, 2, 2, 3, 0, 4, 2],
+                2,
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![0, 1, 3, 0, 4]),
+            ),
+        ];
 
-        let mut nums = vec![0, 1, 2, 2, 3, 0, 4, 2];
-        Solution::remove_element(&mut nums, 2);
-        println!("test_remove_element.val = {:?}", nums);
+        for (args, n, judge) in test_example {
+            let mut margs = args;
+            Solution::remove_element(&mut margs, n);
+            judge.assert(margs);
+        }
     }
 
     #[test]
     fn test_remove_duplicates() {
-        let mut nums = vec![1, 1, 2];
-        Solution::remove_duplicates(&mut nums);
-        println!("test_remove_duplicates.val = {:?}", nums);
+        let test_example = vec![
+            (
+                vec![1, 1, 2],
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![1, 2]),
+            ),
+            (
+                vec![0, 0, 1, 1, 1, 2, 2, 3, 3, 4],
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![0, 1, 2, 3, 4]),
+            ),
+        ];
 
-        let mut nums = vec![0, 0, 1, 1, 1, 2, 2, 3, 3, 4];
-        Solution::remove_duplicates(&mut nums);
-        println!("test_remove_duplicates.val = {:?}", nums);
+        for (args, judge) in test_example {
+            let mut margs = args;
+            Solution::remove_duplicates(&mut margs);
+            judge.assert(margs);
+        }
     }
 
     #[test]
     fn test_check_if_exist() {
-        let nums = vec![10, 2, 5, 3];
-        let exist = Solution::check_if_exist(nums);
-        println!("test_check_if_exist.val = {:?}", exist);
+        let test_example = vec![
+            (vec![10, 2, 5, 3], Judge::<bool>::new(AssertType::Eq, true)),
+            (vec![7, 1, 14, 11], Judge::<bool>::new(AssertType::Eq, true)),
+            (vec![3, 1, 7, 11], Judge::<bool>::new(AssertType::Eq, false)),
+        ];
 
-        let nums = vec![7, 1, 14, 11];
-        let exist = Solution::check_if_exist(nums);
-        println!("test_check_if_exist.val = {:?}", exist);
-
-        let nums = vec![3, 1, 7, 11];
-        let exist = Solution::check_if_exist(nums);
-        println!("test_check_if_exist.val = {:?}", exist);
+        for (args, judge) in test_example {
+            let exist = Solution::check_if_exist(args);
+            judge.assert(exist);
+        }
     }
 
     #[test]
@@ -649,6 +1038,87 @@ mod tests {
         for (args, judge) in test_example {
             let is_mountain = Solution::valid_mountain_array(args);
             judge.assert(is_mountain);
+        }
+    }
+
+    #[test]
+    fn test_replace_elements() {
+        let test_example = vec![
+            (
+                vec![17, 18, 5, 4, 6, 1],
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![18, 6, 6, 6, 1, -1]),
+            ),
+            (vec![400], Judge::<Vec<i32>>::new(AssertType::Eq, vec![-1])),
+        ];
+
+        for (args, judge) in test_example {
+            let result = Solution::replace_elements(args);
+            judge.assert(result);
+        }
+    }
+
+    #[test]
+    fn test_move_zeroes() {
+        let test_example = vec![
+            (
+                vec![0, 1, 0, 3, 12],
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![1, 3, 12, 0, 0]),
+            ),
+            (vec![0], Judge::<Vec<i32>>::new(AssertType::Eq, vec![0])),
+        ];
+
+        for (args, judge) in test_example {
+            let mut margs = args;
+            Solution::move_zeroes(&mut margs);
+            judge.assert(margs);
+        }
+    }
+
+    #[test]
+    fn test_sort_array_by_parity() {
+        let test_example = vec![
+            (
+                vec![3, 1, 2, 4],
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![2, 4, 3, 1]),
+            ),
+            (vec![0], Judge::<Vec<i32>>::new(AssertType::Eq, vec![0])),
+            (
+                vec![0, 1, 2],
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![0, 2, 1]),
+            ),
+        ];
+        for (args, judge) in test_example {
+            // let mut margs = args;
+            let result = Solution::sort_array_by_parity(args);
+            judge.assert(result);
+        }
+    }
+
+    #[test]
+    fn test_third_max() {
+        let test_example = vec![
+            (vec![3, 2, 1], Judge::<i32>::new(AssertType::Eq, 1)),
+            (vec![1, 2], Judge::<i32>::new(AssertType::Eq, 2)),
+            (vec![2, 2, 3, 1], Judge::<i32>::new(AssertType::Eq, 1)),
+        ];
+        for (args, judge) in test_example {
+            let result = Solution::third_max(args);
+            judge.assert(result);
+        }
+    }
+
+    #[test]
+    fn test_find_disappeared_numbers() {
+        let test_example = vec![
+            (
+                vec![4, 3, 2, 7, 8, 2, 3, 1],
+                Judge::<Vec<i32>>::new(AssertType::Eq, vec![5, 6]),
+            ),
+            (vec![1, 1], Judge::<Vec<i32>>::new(AssertType::Eq, vec![2])),
+        ];
+        for (args, judge) in test_example {
+            let result = Solution::find_disappeared_numbers(args);
+            judge.assert(result);
         }
     }
 }
