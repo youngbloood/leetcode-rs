@@ -825,37 +825,8 @@ impl Solution {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::fmt::Debug;
-
-    enum AssertType {
-        Eq,
-        Ne,
-        Nil,
-    }
-
-    struct Judge<T> {
-        at: AssertType,
-        src_val: T,
-    }
-
-    impl<T> Judge<T>
-    where
-        T: Debug + Eq,
-    {
-        pub fn new(at: AssertType, src_val: T) -> Self {
-            return Judge { at, src_val };
-        }
-
-        pub fn assert(&self, target_val: T) {
-            match self.at {
-                AssertType::Eq => {
-                    assert_eq!(self.src_val, target_val);
-                }
-                AssertType::Ne => todo!(),
-                AssertType::Nil => todo!(),
-            }
-        }
-    }
+    use assert::AssertType;
+    use assert::Judge;
 
     #[test]
     fn test_find_max_consecutive_ones() {

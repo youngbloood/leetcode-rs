@@ -9,3 +9,5 @@ edition = "2018"
 [dependencies]
 tree = {path = "./tree"}
 array = {path = "./array"}
+linklist = {path = "./linklist"}
+assert = {path = "./assert"}
