@@ -2,10 +2,7 @@
 // use serde::{Deserialize, Serialize};
 use std::rc::Rc;
 use std::vec::Vec;
-use std::{
-    cell::RefCell,
-    fmt::{Display, Result},
-};
+use std::{cell::RefCell, fmt::Result};
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
@@ -15,18 +12,18 @@ pub struct TreeNode {
     pub next: Option<Rc<RefCell<TreeNode>>>,
 }
 
-impl Display for TreeNode {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result {
-        let preorder_list = self.preorder();
-        let inorder_list = self.inorder();
-        let postorder_list = self.postorder();
-        write!(
-            f,
-            "preorder:({:?}), inorder({:?}), postorder({:?})",
-            preorder_list, inorder_list, postorder_list
-        )
-    }
-}
+// impl Display for TreeNode {
+//     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result {
+//         let preorder_list = self.preorder();
+//         let inorder_list = self.inorder();
+//         let postorder_list = self.postorder();
+//         write!(
+//             f,
+//             "preorder:({:?}), inorder({:?}), postorder({:?})",
+//             preorder_list, inorder_list, postorder_list
+//         )
+//     }
+// }
 
 impl TreeNode {
     #[inline]
@@ -300,4 +297,56 @@ impl TreeNode {
             }
         }
     }
+
+    // pub fn lowest_common_ancestor(
+    //     &self,
+    //     p: &Rc<RefCell<TreeNode>>,
+    //     q: &Rc<RefCell<TreeNode>>,
+    // ) -> Option<Rc<RefCell<TreeNode>>> {
+    //     let flag_p = self.find_pos(&p).unwrap();
+    //     let flag_q = self.find_pos(&q).unwrap();
+    //     match flag_p + flag_q {
+    //         0 | 1 => return Some(Rc::new(RefCell::new(*self))),
+    //         2 => {
+    //             if let Some(ref left) = self.left {
+    //                 let lleft = &left.borrow();
+    //                 return lleft.lowest_common_ancestor(&p, &q);
+    //             }
+    //         }
+    //         -2 => {
+    //             if let Some(ref right) = self.right {
+    //                 let rright = &right.borrow();
+    //                 return rright.lowest_common_ancestor(&p, &q);
+    //             }
+    //         }
+    //         _ => return None,
+    //     }
+    //     return None;
+    // }
+
+    // // target是否在root树中;None:不在树中，-1：在左子树中；0:在root根节点上；1：在右子树中
+    // fn find_pos(&self, target: &Rc<RefCell<TreeNode>>) -> Option<i32> {
+    //     if self.val == target.borrow().val {
+    //         return Some(0);
+    //     }
+
+    //     if let Some(ref left) = self.left {
+    //         if let Some(flag) = TreeNode::find_pos(&left.borrow(), target) {
+    //             match flag {
+    //                 -1 | 0 | 1 => return Some(-1),
+    //                 _ => {}
+    //             }
+    //         }
+    //     }
+
+    //     if let Some(ref right) = self.right {
+    //         if let Some(flag) = TreeNode::find_pos(&right.borrow(), target) {
+    //             match flag {
+    //                 -1 | 0 | 1 => return Some(1),
+    //                 _ => {}
+    //             }
+    //         }
+    //     }
+    //     return None;
+    // }
 }

@@ -1,7 +1,9 @@
+mod codec;
+mod codec2;
 mod node;
 
 use node::TreeNode;
-use std::cell::{Ref, RefCell};
+use std::cell::RefCell;
 use std::rc::Rc;
 
 struct Solution;
@@ -497,6 +499,8 @@ impl Solution {
       6   2   0   8
          / \
         7   4
+    preorder: 3,5,6,2,7,4,1,0,8
+    inorder:  6,5,7,2,4,3,0,1,8
 
     Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
     Output: 3
@@ -527,14 +531,53 @@ impl Solution {
     p != q
     p and q will exist in the tree.
         */
-    pub fn lowest_common_ancestor(
-        root: Option<Rc<RefCell<TreeNode>>>,
-        p: Option<Rc<RefCell<TreeNode>>>,
-        q: Option<Rc<RefCell<TreeNode>>>,
-    ) -> Option<Rc<RefCell<TreeNode>>> {
-        return None;
-    }
+    // pub fn lowest_common_ancestor(
+    //     root: Option<Rc<RefCell<TreeNode>>>,
+    //     p: Option<Rc<RefCell<TreeNode>>>,
+    //     q: Option<Rc<RefCell<TreeNode>>>,
+    // ) -> Option<Rc<RefCell<TreeNode>>> {
+    //     let flag_p = Solution::find_pos(&root, &p).unwrap();
+    //     let flag_q = Solution::find_pos(&root, &q).unwrap();
 
+    //     // let right = &root.as_ref().unwrap().borrow().right;
+    //     // let left = &root.as_ref().unwrap().borrow().left;
+    //     let left_node = &root.unwrap().to_owned().clone().borrow_mut().left;
+    //     let right_node = &root.unwrap().to_owned().clone().borrow_mut().right;
+    //     let now_node = &root.unwrap().to_owned().clone();
+    //     match flag_p + flag_q {
+    //         0 | 1 => return Some(*now_node),
+    //         2 => return Solution::lowest_common_ancestor(*right_node, p, q),
+    //         -2 => return Solution::lowest_common_ancestor(*left_node, p, q),
+    //         _ => return None,
+    //     }
+    // }
+
+    // // target是否在root树中;None:不在树中，-1：在左子树中；0:在root根节点上；1：在右子树中
+    // fn find_pos(
+    //     root: &Option<Rc<RefCell<TreeNode>>>,
+    //     target: &Option<Rc<RefCell<TreeNode>>>,
+    // ) -> Option<i32> {
+    //     if root.as_ref().unwrap().borrow().val == target.as_ref().unwrap().borrow().val {
+    //         return Some(0);
+    //     }
+    //     if let Some(flag) = Solution::find_pos(&root.as_ref().unwrap().borrow().left, target) {
+    //         match flag {
+    //             -1 | 0 | 1 => return Some(-1),
+    //             _ => {}
+    //         }
+    //     }
+    //     if let Some(flag) = Solution::find_pos(&root.as_ref().unwrap().borrow().right, target) {
+    //         match flag {
+    //             -1 | 0 | 1 => return Some(-1),
+    //             _ => {}
+    //         }
+    //     }
+    //     return None;
+    // }
+    /**
+    https://leetcode.com/explore/learn/card/data-structure-tree/133/conclusion/994/
+    https://leetcode.com/explore/learn/card/data-structure-tree/133/conclusion/1016/
+        */
     pub fn connect_with_next(root: &mut Option<Rc<RefCell<TreeNode>>>) {
         match root {
             Some(ref mut node) => node.borrow_mut().connect_with_next(),
@@ -695,4 +738,26 @@ mod tests {
         Solution::connect_with_next(&mut root);
         println!("root = {:?}", root);
     }
+
+    // #[test]
+    // pub fn test_lowest_common_ancestor() {
+    //     let preorder = vec![3, 5, 6, 2, 7, 4, 1, 0, 8];
+    //     let inorder = vec![6, 5, 7, 2, 4, 3, 0, 1, 8];
+    //     let root = gen_tree(&preorder, &inorder);
+    //     let p = Some(Rc::new(RefCell::new(TreeNode {
+    //         val: 5,
+    //         left: None,
+    //         right: None,
+    //         next: None,
+    //     })));
+    //     let q = Some(Rc::new(RefCell::new(TreeNode {
+    //         val: 0,
+    //         left: None,
+    //         right: None,
+    //         next: None,
+    //     })));
+
+    //     let lca = Solution::lowest_common_ancestor(root, p, q);
+    //     println!("lca = {:?}", lca);
+    // }
 }
